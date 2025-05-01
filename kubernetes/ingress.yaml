@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: microservices-gateway
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /password-manager(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: password-manager-service
+                port:
+                  number: 8080
+          - path: /citations(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: citation-service
+                port:
+                  number: 8081

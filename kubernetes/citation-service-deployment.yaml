@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: citation-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: citation-service
+  template:
+    metadata:
+      labels:
+        app: citation-service
+    spec:
+      containers:
+        - name: citation-service
+          image: votre-username/citation-service:1.0
+          ports:
+            - containerPort: 8081
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "100m"
+              memory: "256Mi"

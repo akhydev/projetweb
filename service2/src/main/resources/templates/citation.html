@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Citations de Cybersécurité</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Citations de Cybersécurité</h1>
+
+        <div class="citation-container">
+            <blockquote class="citation-text" th:text="${citation.texte}">
+                La sécurité est un processus, pas un produit.
+            </blockquote>
+            <p class="citation-author" th:text="${citation.auteur}">Bruce Schneier</p>
+        </div>
+
+        <a href="/" class="refresh-button">Nouvelle citation</a>
+
+        <footer>
+            <p>Service de Citations de Cybersécurité - Microservice 2</p>
+        </footer>
+    </div>
+</body>
+
+</html>

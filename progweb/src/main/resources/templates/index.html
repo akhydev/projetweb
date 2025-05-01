@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Manager - ProgwebApplication</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header section -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-shield-alt logo-shield"></i>
+                SecurePass Manager
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-secondary" id="generate-password-btn">
+                    <i class="fas fa-key"></i> Generate Password
+                </button>
+                <button class="btn btn-secondary" id="citation-btn">
+                    <i class="fas fa-quote-right"></i> Citation du jour
+                </button>
+                <button class="btn btn-primary" id="add-password-btn">
+                    <i class="fas fa-plus"></i> Add Password
+                </button>
+            </div>
+        </header>
+        
+        <!-- Stats section -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon weak">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Weak Passwords</h3>
+                    <p id="weak-count" th:text="${weakCount}">0</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon strong">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Strong Passwords</h3>
+                    <p id="strong-count" th:text="${strongCount}">0</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon expiring">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                    <h3>Expiring Soon</h3>
+                    <p id="expiring-count" th:text="${expiringCount}">0</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Your Passwords</h2>
+                <div class="search-container">
+                    <input type="text" id="search-input" placeholder="Search passwords...">
+                </div>
+            </div>
+            <div class="password-list">
+                <div class="password-header">
+                    <div class="col name">Name</div>
+                    <div class="col username">Username</div>
+                    <div class="col website">Website</div>
+                    <div class="col actions">Actions</div>
+                </div>
+                <div id="password-container">
+                    <!-- Password rows will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Password Generator Modal -->
+    <div class="modal" id="generate-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Password Generator</h3>
+                <button class="btn-icon close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Password Length: <span id="length-value">16</span></label>
+                    <div class="length-container">
+                        <input type="range" id="password-length" min="8" max="32" value="16">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="special-chars" checked>
+                        Include Special Characters
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label>Generated Password</label>
+                    <div class="generated-password-container">
+                        <input type="text" id="generated-password" readonly>
+                        <button class="btn btn-secondary" id="copy-generated-password">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary close-btn">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="use-generated-password">Use This Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- View Password Modal -->
+    <div class="modal" id="view-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Password Details</h3>
+                <button class="btn-icon close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="view-details">
+                    <div class="detail-row">
+                        <div class="detail-item">
+                            <h4>Name</h4>
+                            <p id="view-name">Google Account</p>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <h4>Username</h4>
+                            <p id="view-username">user@example.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item password-item">
+                        <h4>Password</h4>
+                        <div class="password-view">
+                            <input type="password" id="view-password" readonly>
+                            <button class="btn btn-icon" id="toggle-view-password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-secondary" id="copy-view-password">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <h4>Website</h4>
+                        <p id="view-website">https://accounts.google.com</p>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <div class="detail-item">
+                            <h4>Strength</h4>
+                            <span class="strength-badge" id="view-strength">Strong</span>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <h4>Created</h4>
+                            <p id="view-created">01 Jan 2023</p>
+                        </div>
+                    </div>
+                
+                    <div class="detail-item">
+                        <h4>Expires</h4>
+                        <p id="view-expires">01 Apr 2023</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/script.js"></script>
+</body>
+</html>
